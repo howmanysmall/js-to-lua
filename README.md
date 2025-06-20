@@ -13,9 +13,11 @@ Conversion tool for migrating JS/TS code into Luau.
 
 ## Prerequisites
 
-**The project requires the following tools:**
+**For building the project, you need:**
 
 - [Node](https://nodejs.org) (version >= 16)
+
+**For using standalone executables:** No prerequisites required! The executables include everything needed to run.
 
 ## Setup
 
@@ -33,7 +35,51 @@ npm run build:prod
 
 The build JS file will be placed in `dist/apps/convert-js-to-lua/main.js`
 
+### Building Standalone Executables
+
+You can also build standalone executables that don't require Node.js to be installed:
+
+```bash
+# Build for current platform only
+npm run build:exe
+
+# Build for all platforms (macOS, Linux, Windows)
+npm run build:exe:all
+
+# Create complete distribution package
+npm run package:dist
+```
+
+The executables will be created in `dist/executables/` and include binaries for:
+
+- macOS (Intel and Apple Silicon)
+- Linux (x64)
+- Windows (x64)
+
+A complete distribution package is created in `dist/release/` with:
+
+- All platform executables
+- Required babel configuration files
+- Wrapper script for easy usage
+- Usage documentation
+
+**Using the standalone executable:**
+
+```bash
+# Easy way (with wrapper script)
+cd dist/release
+chmod +x js-to-lua-wrapper.sh
+./js-to-lua-wrapper.sh --input input.js --output output/
+
+# Direct way (requires babel configs)
+./js-to-lua --input input.js --output output/ \
+  --babelConfig babel-ts.config.json \
+  --babelTransformConfig babel-transform-react.config.json
+```
+
 ## Usage
+
+**Note:** If you're using the standalone executable, you can skip the babel package installation and use the simpler commands shown in the "Building Standalone Executables" section above.
 
 The CLI tool accepts the following input parameters:
 

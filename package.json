@@ -32,14 +32,21 @@
     "help": "nx help",
     "prepare": "husky install & npm run playground:assume-unchanged",
     "playground:assume-unchanged": "git update-index --assume-unchanged apps/playground/src/main.ts apps/playground/src/main.spec.ts apps/playground/src/run.ts",
-    "playground:no-assume-unchanged": "git update-index --no-assume-unchanged apps/playground/src/main.ts apps/playground/src/main.spec.ts apps/playground/src/run.ts"
+    "playground:no-assume-unchanged": "git update-index --no-assume-unchanged apps/playground/src/main.ts apps/playground/src/main.spec.ts apps/playground/src/run.ts",
+    "build:exe": "npm run build:prod && npm run pkg:build",
+    "build:exe:all": "npm run build:prod && npm run pkg:build:all",
+    "package:dist": "npm run build:exe:all && npm run create:dist",
+    "create:dist": "mkdir -p dist/release && cp dist/executables/* dist/release/ && cp babel-*.config.json dist/release/ && cp tools/scripts/js-to-lua-wrapper.sh dist/release/ && echo 'Distribution package created in dist/release/'",
+    "pkg:build": "pkg dist/apps/convert-js-to-lua/index.js --targets node18-macos-arm64 --output ./dist/executables/js-to-lua",
+    "pkg:build:all": "pkg dist/apps/convert-js-to-lua/index.js --targets node18-macos-x64,node18-macos-arm64,node18-linux-x64,node18-win-x64 --out-path ./dist/executables"
   },
   "private": true,
   "dependencies": {
-    "@babel/core": "^7.15.0",
+    "@babel/core": "^7.27.4",
     "@babel/parser": "7.15.3",
     "@babel/plugin-syntax-flow": "^7.16.7",
-    "@babel/preset-react": "^7.14.5",
+    "@babel/plugin-syntax-typescript": "^7.27.1",
+    "@babel/preset-react": "^7.27.1",
     "@babel/preset-typescript": "^7.15.0",
     "@babel/traverse": "^7.18.2",
     "@babel/types": "7.15.0",
@@ -81,9 +88,17 @@
     "jest": "28.1.3",
     "lint-staged": "^10.5.4",
     "nx": "15.0.0",
+    "pkg": "^5.8.1",
     "prettier": "2.7.1",
     "ts-jest": "28.0.8",
     "ts-node": "10.9.1",
     "typescript": "4.8.4"
+  },
+  "pkg": {
+    "scripts": "dist/apps/convert-js-to-lua/**/*.js",
+    "assets": [
+      "dist/apps/convert-js-to-lua/assets/**/*"
+    ],
+    "outputPath": "dist/executables"
   }
 }
